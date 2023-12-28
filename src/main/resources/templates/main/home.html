@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Crawling Home</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+</head>
+<body>
+    <div class="container mt-5">
+        <form id="myForm" class="form-inline justify-content-center">
+            <!-- Bootstrap Select Box -->
+            <div class="form-group mr-2">
+                <select class="form-control" id="brands">
+                    {{#providers}}
+                        <option value="{{code}}">{{code}}</option>
+                    {{/providers}}
+                </select>
+            </div>
+
+            <!-- Bootstrap Input Box -->
+            <div class="form-group mr-2">
+                <input type="text" class="form-control" id="url" placeholder="Enter Url" style="width: 700px;">
+            </div>
+
+            <!-- Bootstrap Submit Button -->
+            <div class="form-group">
+                <button type="button" class="btn btn-primary" id="search">search</button>
+            </div>
+        </form>
+
+        <!-- 결과를 표시할 영역 -->
+        <div id="resultArea" class="mt-3"></div>
+    </div>
+
+    <!-- jQuery 및 Bootstrap JS 추가 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+            integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+            crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+            integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+            crossorigin="anonymous"></script>
+
+    <script>
+        $(document).ready(function () {
+            $('#search').click(function () {
+                let data = {
+                    'url': $('#url').val(),
+                    'brand': $('#brands').val()
+                };
+
+                $.ajax({
+                    type: 'POST',
+                    url: '/crawl/download/images',
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    data: JSON.stringify(data),
+                    success: function (response) {
+                        alert(response.data);
+                    },
+                    error: function (error) {
+                        console.error("Error:", error);
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

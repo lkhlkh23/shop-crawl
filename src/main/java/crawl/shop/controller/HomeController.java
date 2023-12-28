@@ -21,4 +21,13 @@ public class HomeController {
 		return "/main/home";
 	}
 
+	@GetMapping("/home2")
+	public String viewHome2(final Model model) {
+		log.info("view home2");
+		log.info("user directory : {}", System.getProperty("user.home"));
+		model.addAttribute("providers", ProviderCode.values());
+
+		return "main/home";
+	}
+
 }

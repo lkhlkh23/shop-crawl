@@ -10,11 +10,12 @@ import lombok.extern.slf4j.Slf4j;
 
 @Controller
 @Slf4j
-@RequestMapping("/home")
 public class HomeController {
 
-	@GetMapping("")
+	@GetMapping("/home")
 	public String viewHome(final Model model) {
+		log.info("view home");
+		log.info("user directory : {}", System.getProperty("user.home"));
 		model.addAttribute("providers", ProviderCode.values());
 
 		return "/main/home";

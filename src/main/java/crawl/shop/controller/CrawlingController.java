@@ -1,5 +1,7 @@
 package crawl.shop.controller;
 
+import java.util.List;
+
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,14 +18,14 @@ import lombok.extern.slf4j.Slf4j;
 public class CrawlingController {
 
 	@PostMapping("/download/images")
-	public Response downloadImages(@RequestBody final CrawlingRequest request) {
+	public Response<List<String>> downloadImages(@RequestBody final CrawlingRequest request) {
 		log.info("request : {}", request.toString());
 		try {
-			ProviderCode.getCrawler(request.getBrand()).crawl(request.getUrl());
-			return Response.ok("다운로드가 모두 성공했습니다!");
+			final List<String> images = ProviderCode.getCrawler(request.getBrand()).crawl(request.getUrl());
+			return new Response<>(images, 200);
 		} catch (Exception e) {
 			log.error("Crawling is failed", e);
-			return Response.fail("다운로드가 실패했습니다!");
+			return new Response<>(List.of(), 500);
 		}
 	}
 

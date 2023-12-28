@@ -30,9 +30,9 @@
                 <button type="button" class="btn btn-primary" id="search">search</button>
             </div>
         </form>
-
-        <!-- 결과를 표시할 영역 -->
-        <div id="resultArea" class="mt-3"></div>
+    </div>
+    <div id="crawl-images" class="form-inline justify-content-center">
+        <button type="button" class="btn btn-primary" id="down-all-images">DOWNLOAD</button>
     </div>
 
     <!-- jQuery 및 Bootstrap JS 추가 -->
@@ -58,14 +58,55 @@
                     dataType: "json",
                     data: JSON.stringify(data),
                     success: function (response) {
-                        alert(response.data);
+                        $.each(response.data, function(index, value) {
+                            // let image = document.createElement("a");
+                            // image.style = "display: none";
+                            // image.href = value;
+                            // image.download = random() + '.png';
+
+                            // document.body.appendChild(image);
+                            // image.click();
+
+                            let imgTag = $('<img>', {
+                              src: 'data:image/png;base64,' + value,
+                              width : '100px',
+                              height : '200px'
+                            });
+
+                            let aTag = $('<a>', {
+                              href: 'data:image/png;base64,' + value,
+                              download: random() + '.png',
+                              class: 'down-image'
+                            });
+
+                            aTag.append(imgTag);
+                            aTag.click();
+
+                            $('#crawl-images').append(aTag);
+                        });
                     },
                     error: function (error) {
-                        console.error("Error:", error);
                     }
                 });
             });
+
+            $('#down-all-images').on('click', function() {
+              $('.down-image').each(function() {
+                this.click();
+              });
+            });
         });
+
+        function random() {
+            let characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+            let random = '';
+
+            for (var i = 0; i < 20; i++) {
+                random += characters.charAt(Math.floor(Math.random() * characters.length));
+            }
+
+            return random;
+        }
     </script>
 </body>
 </html>

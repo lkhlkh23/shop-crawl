@@ -6,6 +6,8 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
@@ -13,6 +15,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import crawl.shop.type.ProviderCode;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
@@ -26,7 +29,8 @@ public class ZalandoCrawler extends BaseCrawler {
 	}
 
 	@Override
-	public void crawl(final String url) throws Exception {
+	public List<String> crawl(final String url) throws Exception {
+		final List<String> images = new ArrayList<>();
 		final Connection conn = Jsoup.connect(url);
 		try {
 			final Document document = conn.get();
@@ -36,11 +40,13 @@ public class ZalandoCrawler extends BaseCrawler {
 			for (final Element element : elements) {
 				final String image = element.select("img")
 											.attr("src");
-				download(image);
+				images.add(toBase64(ProviderCode.ZALANDO, image));
 			}
 		} catch (IOException e) {
 			throw new Exception("Zalando crawling is failed");
 		}
+
+		return images;
 	}
 
 }

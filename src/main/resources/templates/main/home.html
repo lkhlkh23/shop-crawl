@@ -1,7 +1,7 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
 <head>
-    <title>Crawling Home</title>
+    <title>Crawler</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
@@ -11,7 +11,6 @@
 <body>
     <div class="container mt-5">
         <form id="myForm" class="form-inline justify-content-center">
-            <!-- Bootstrap Select Box -->
             <div class="form-group mr-2">
                 <select class="form-control" id="brands">
                     {{#providers}}
@@ -20,22 +19,26 @@
                 </select>
             </div>
 
-            <!-- Bootstrap Input Box -->
             <div class="form-group mr-2">
-                <input type="text" class="form-control" id="url" placeholder="Enter Url" style="width: 700px;">
+                <input type="text" class="form-control" id="search-text" placeholder="Enter Url" style="width: 700px;">
             </div>
 
-            <!-- Bootstrap Submit Button -->
-            <div class="form-group">
-                <button type="button" class="btn btn-primary" id="search">search</button>
+            <div class="form-group mr-2">
+                <button type="button" class="btn btn-primary" id="search-btn">search</button>
+            </div>
+
+            <div class="form-group mr-2">
+                <button type="button" class="btn btn-info" id="down-images-btn">download</button>
+            </div>
+
+            <div class="form-group mr-2">
+                <button type="button" class="btn btn-warning" id="clear-search-btn">clear</button>
             </div>
         </form>
     </div>
-    <div id="crawl-images" class="form-inline justify-content-center">
-        <button type="button" class="btn btn-primary" id="down-all-images">DOWNLOAD</button>
+    <div id="crawl-images" class="container mt-5 form-inline justify-content-center">
     </div>
 
-    <!-- jQuery 및 Bootstrap JS 추가 -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
             integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
             crossorigin="anonymous"></script>
@@ -43,11 +46,13 @@
             integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
             crossorigin="anonymous"></script>
 
-    <script>
+    <script type="">
         $(document).ready(function () {
-            $('#search').click(function () {
+            $('#search-btn').click(function () {
+                $('.down-image').remove();
+
                 let data = {
-                    'url': $('#url').val(),
+                    'url': $('#search-text').val(),
                     'brand': $('#brands').val()
                 };
 
@@ -59,14 +64,6 @@
                     data: JSON.stringify(data),
                     success: function (response) {
                         $.each(response.data, function(index, value) {
-                            // let image = document.createElement("a");
-                            // image.style = "display: none";
-                            // image.href = value;
-                            // image.download = random() + '.png';
-
-                            // document.body.appendChild(image);
-                            // image.click();
-
                             let imgTag = $('<img>', {
                               src: 'data:image/png;base64,' + value,
                               width : '100px',
@@ -76,7 +73,7 @@
                             let aTag = $('<a>', {
                               href: 'data:image/png;base64,' + value,
                               download: random() + '.png',
-                              class: 'down-image'
+                              class: 'down-image mr-2'
                             });
 
                             aTag.append(imgTag);
@@ -90,10 +87,14 @@
                 });
             });
 
-            $('#down-all-images').on('click', function() {
+            $('#down-images-btn').on('click', function() {
               $('.down-image').each(function() {
                 this.click();
               });
+            });
+
+            $('#clear-search-btn').on('click', function() {
+              $('#search-text').val('');
             });
         });
 

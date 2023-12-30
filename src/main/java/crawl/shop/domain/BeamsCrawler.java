@@ -8,6 +8,9 @@ import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
+import java.util.stream.Collectors;
 
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
@@ -37,17 +40,31 @@ public class BeamsCrawler extends BaseCrawler {
 			final Elements elements = document.getElementsByClass("item-detail-main")
 											  .select("ul")
 											  .select("li[class='item-image']");
-			for (final Element element : elements) {
-				final String image = element.select("img")
-											.attr("data-zoom-image");
-				images.add(toBase64(ProviderCode.BEAMS, "http:" + image, 0.58));
-			}
+			final List<CompletableFuture<String>> futures = elements.stream()
+																	.map(this::asyncCrawl)
+																	.toList();
+			CompletableFuture.allOf(futures.toArray(new CompletableFuture[0])).join();
+			futures.forEach(i -> {
+				try {
+					images.add(i.get());
+				} catch (Exception e) {
+					throw new RuntimeException(e);
+				}
+			});
 		} catch (IOException e) {
 			e.printStackTrace();
 			throw new Exception("Beams crawling is failed");
 		}
 
 		return images;
+	}
+
+	private CompletableFuture<String> asyncCrawl(final Element element) {
+		return CompletableFuture.supplyAsync(() -> {
+			final String image = element.select("img")
+										.attr("data-zoom-image");
+			return toBase64(ProviderCode.BEAMS, "http:" + image, 0.58);
+		});
 	}
 
 }

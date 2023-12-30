@@ -23,22 +23,26 @@ public abstract class BaseCrawler {
 
 	public abstract List<String> crawl(final String url) throws Exception;
 
-	protected String toBase64(final ProviderCode brand, final String url, final double percentage) throws Exception {
-		final BufferedImage image = ImageIO.read(new URL(url));
-		final int width = (int) (image.getWidth() * percentage);
-		final int height = (int) (image.getHeight() * percentage);
+	protected String toBase64(final ProviderCode brand, final String url, final double percentage) {
+		try {
+			final BufferedImage image = ImageIO.read(new URL(url));
+			final int width = (int) (image.getWidth() * percentage);
+			final int height = (int) (image.getHeight() * percentage);
 
-		final BufferedImage resized = new BufferedImage(width, height, image.getType());
-		final Graphics2D g2d = resized.createGraphics();
-		g2d.drawImage(image, 0, 0, width, height, null);
-		g2d.dispose();
+			final BufferedImage resized = new BufferedImage(width, height, image.getType());
+			final Graphics2D g2d = resized.createGraphics();
+			g2d.drawImage(image, 0, 0, width, height, null);
+			g2d.dispose();
 
-		final File completed = new File(brand.getCode() + LocalDateTime.now().toString());
-		ImageIO.write(resized, "png", completed);
-		final String encoded = Base64.getEncoder().encodeToString(FileUtils.readFileToByteArray(completed));
-		completed.delete();
+			final File completed = new File(brand.getCode() + LocalDateTime.now().toString());
+			ImageIO.write(resized, "png", completed);
+			final String encoded = Base64.getEncoder().encodeToString(FileUtils.readFileToByteArray(completed));
+			completed.delete();
 
-		return encoded;
+			return encoded;
+		} catch (Exception e) {
+			return "";
+		}
 	}
 
 }

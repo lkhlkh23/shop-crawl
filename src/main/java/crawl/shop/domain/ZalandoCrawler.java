@@ -42,7 +42,7 @@ public class ZalandoCrawler extends BaseCrawler {
 				final String image = elements.get(i)
 											 .select("img")
 											 .attr("src");
-				pageCrawling.addImage(toResizedBase64(ProviderCode.ZALANDO, image, 1));
+				pageCrawling.addImage(toBase64(ProviderCode.ZALANDO, image));
 				pageCrawling.setEnd(i == (limit - 1));
 			}
 		} catch (IOException e) {

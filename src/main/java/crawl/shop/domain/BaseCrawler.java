@@ -22,21 +22,15 @@ public abstract class BaseCrawler {
 
 	public abstract List<String> crawl(final String url) throws Exception;
 
-	protected void download(final String image) {
-		try (final InputStream in = new URL(image).openStream()) {
-			final String directory = System.getProperty("user.home");
-			Files.copy(in, Paths.get(String.format("%s/Desktop/image-%s.jpg", directory, LocalDateTime.now())));
-		} catch (Exception e) {
-
-		}
-	}
-
 	protected String toBase64(final ProviderCode brand, final String url) throws Exception {
 		final BufferedImage image = ImageIO.read(new URL(url));
 		final File file = new File(brand.getCode() + LocalDateTime.now().toString());
 		ImageIO.write(image, "jpeg", file);
 
-		return Base64.getEncoder().encodeToString(FileUtils.readFileToByteArray(file));
+		final String encoded = Base64.getEncoder().encodeToString(FileUtils.readFileToByteArray(file));
+		file.delete();
+
+		return encoded;
 	}
 
 }

@@ -63,6 +63,11 @@
                     dataType: "json",
                     data: JSON.stringify(data),
                     success: function (response) {
+                        if(response.data.length == 0) {
+                            alert('Parsing is failed');
+                            return;
+                        }
+
                         $.each(response.data, function(index, value) {
                             let imgTag = $('<img>', {
                               src: 'data:image/png;base64,' + value,

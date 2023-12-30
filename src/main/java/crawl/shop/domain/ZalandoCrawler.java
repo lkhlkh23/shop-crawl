@@ -40,7 +40,7 @@ public class ZalandoCrawler extends BaseCrawler {
 			for (final Element element : elements) {
 				final String image = element.select("img")
 											.attr("src");
-				images.add(toBase64(ProviderCode.ZALANDO, image, 0.58));
+				images.add(toBase64(ProviderCode.ZALANDO, image, 1));
 			}
 		} catch (IOException e) {
 			throw new Exception("Zalando crawling is failed");

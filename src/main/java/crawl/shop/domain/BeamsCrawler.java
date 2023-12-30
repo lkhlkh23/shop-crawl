@@ -43,6 +43,7 @@ public class BeamsCrawler extends BaseCrawler {
 				images.add(toBase64(ProviderCode.BEAMS, "http:" + image, 0.58));
 			}
 		} catch (IOException e) {
+			e.printStackTrace();
 			throw new Exception("Beams crawling is failed");
 		}
 

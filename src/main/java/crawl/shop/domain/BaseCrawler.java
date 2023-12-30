@@ -1,5 +1,6 @@
 package crawl.shop.domain;
 
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -22,13 +23,20 @@ public abstract class BaseCrawler {
 
 	public abstract List<String> crawl(final String url) throws Exception;
 
-	protected String toBase64(final ProviderCode brand, final String url) throws Exception {
+	protected String toBase64(final ProviderCode brand, final String url, final double percentage) throws Exception {
 		final BufferedImage image = ImageIO.read(new URL(url));
-		final File file = new File(brand.getCode() + LocalDateTime.now().toString());
-		ImageIO.write(image, "jpeg", file);
+		final int width = (int) (image.getWidth() * percentage);
+		final int height = (int) (image.getHeight() * percentage);
 
-		final String encoded = Base64.getEncoder().encodeToString(FileUtils.readFileToByteArray(file));
-		file.delete();
+		final BufferedImage resized = new BufferedImage(width, height, image.getType());
+		final Graphics2D g2d = resized.createGraphics();
+		g2d.drawImage(image, 0, 0, width, height, null);
+		g2d.dispose();
+
+		final File completed = new File(brand.getCode() + LocalDateTime.now().toString());
+		ImageIO.write(resized, "png", completed);
+		final String encoded = Base64.getEncoder().encodeToString(FileUtils.readFileToByteArray(completed));
+		completed.delete();
 
 		return encoded;
 	}

@@ -40,7 +40,7 @@ public class BeamsCrawler extends BaseCrawler {
 			for (final Element element : elements) {
 				final String image = element.select("img")
 											.attr("data-zoom-image");
-				images.add(toBase64(ProviderCode.BEAMS, "http:" + image));
+				images.add(toBase64(ProviderCode.BEAMS, "http:" + image, 0.58));
 			}
 		} catch (IOException e) {
 			throw new Exception("Beams crawling is failed");

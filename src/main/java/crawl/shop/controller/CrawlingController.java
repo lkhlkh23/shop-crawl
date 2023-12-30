@@ -19,7 +19,6 @@ public class CrawlingController {
 
 	@PostMapping("/download/images")
 	public Response<List<String>> downloadImages(@RequestBody final CrawlingRequest request) {
-		log.info("request : {}", request.toString());
 		try {
 			final List<String> images = ProviderCode.getCrawler(request.getBrand()).crawl(request.getUrl());
 			return new Response<>(images, 200);

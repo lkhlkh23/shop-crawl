@@ -39,7 +39,7 @@ public class CosCrawler extends BaseCrawler {
 			for (final Element element : elements) {
 				final String image = element.select("img")
 											.attr("data-zoom-src");
-				images.add(toBase64(ProviderCode.COS, "http:" + image));
+				images.add(toBase64(ProviderCode.COS, "http:" + image, 0.58));
 			}
 		} catch (IOException e) {
 			throw new Exception("Cos crawling is failed");

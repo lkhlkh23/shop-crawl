@@ -36,7 +36,7 @@ public class BeamsCrawler extends BaseCrawler {
 			final Document document = conn.get();
 			final Elements elements = document.getElementsByClass("item-detail-main")
 											  .select("ul")
-											  .select("li");
+											  .select("li[class='item-image']");
 			for (final Element element : elements) {
 				final String image = element.select("img")
 											.attr("data-zoom-image");

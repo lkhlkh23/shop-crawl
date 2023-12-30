@@ -8,7 +8,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import crawl.shop.controller.dto.CrawlingRequest;
+import crawl.shop.controller.dto.CrawlingResponse;
 import crawl.shop.controller.dto.Response;
+import crawl.shop.domain.PageCrawling;
 import crawl.shop.type.ProviderCode;
 import lombok.extern.slf4j.Slf4j;
 
@@ -18,13 +20,13 @@ import lombok.extern.slf4j.Slf4j;
 public class CrawlingController {
 
 	@PostMapping("/download/images")
-	public Response<List<String>> downloadImages(@RequestBody final CrawlingRequest request) {
+	public CrawlingResponse downloadImages(@RequestBody final CrawlingRequest request) {
 		try {
-			final List<String> images = ProviderCode.getCrawler(request.getBrand()).crawl(request.getUrl());
-			return new Response<>(images, 200);
+			final PageCrawling pages = ProviderCode.getCrawler(request.getBrand()).crawl(request.getUrl(), request.getPage(), request.getOffset());
+			return new CrawlingResponse(pages.getImages(), pages.isEnd());
 		} catch (Exception e) {
 			log.error("Crawling is failed", e);
-			return new Response<>(List.of(), 500);
+			return new CrawlingResponse(List.of(), true);
 		}
 	}
 

@@ -61,52 +61,13 @@
         $(document).ready(function () {
             $('#search-btn').click(function () {
                 $('.down-image').remove();
-
                 let data = {
                     'url': $('#search-text').val(),
-                    'brand': $('#brands').val()
+                    'brand': $('#brands').val(),
+                    'page' : 5,
+                    'offset' : 0
                 };
-
-                $.ajax({
-                    type: 'POST',
-                    url: '/crawl/download/images',
-                    contentType: "application/json; charset=utf-8",
-                    dataType: "json",
-                    data: JSON.stringify(data),
-                    success: function (response) {
-                        $("#search-spinner").hide();
-                        if(response.data.length == 0) {
-                            alert('Parsing is failed');
-                            return;
-                        }
-
-                        $.each(response.data, function(index, value) {
-                            let imgTag = $('<img>', {
-                              src: 'data:image/png;base64,' + value,
-                              width : '100px',
-                              height : '200px'
-                            });
-
-                            let aTag = $('<a>', {
-                              href: 'data:image/png;base64,' + value,
-                              download: random() + '.png',
-                              class: 'down-image mr-2'
-                            });
-
-                            aTag.append(imgTag);
-                            aTag.click();
-
-                            $('#crawl-images').append(aTag);
-                        });
-                    },
-                    error: function (error) {
-                        $("#search-spinner").hide();
-                    },
-                    beforeSend: function() {
-                        $("#search-spinner").show();
-                    }
-
-                });
+                crawl(data);
             });
 
             $('#down-images-btn').on('click', function() {
@@ -119,6 +80,61 @@
               $('#search-text').val('');
             });
         });
+
+        function crawl(param) {
+            $.ajax({
+                type: 'POST',
+                url: '/crawl/download/images',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                data: JSON.stringify(param),
+                success: function (response) {
+                    $("#search-spinner").hide();
+                    if(response.images.length == 0) {
+                        alert('Parsing is failed');
+                        return;
+                    }
+
+                    $.each(response.images, function(index, value) {
+                        let imgTag = $('<img>', {
+                          src: 'data:image/png;base64,' + value,
+                          width : '100px',
+                          height : '200px'
+                        });
+
+                        let aTag = $('<a>', {
+                          href: 'data:image/png;base64,' + value,
+                          download: random() + '.png',
+                          class: 'down-image mr-2'
+                        });
+
+                        aTag.append(imgTag);
+                        aTag.click();
+
+                        $('#crawl-images').append(aTag);
+                    });
+                    console.log(response);
+
+                    if(!response.end) {
+                        console.log(param.offset);
+                        let data = {
+                            'url': $('#search-text').val(),
+                            'brand': $('#brands').val(),
+                            'page' : 5,
+                            'offset' : param.offset + 1
+                        };
+
+                        crawl(data);
+                    }
+                },
+                error: function (error) {
+                    $("#search-spinner").hide();
+                },
+                beforeSend: function() {
+                    $("#search-spinner").show();
+                }
+            });
+        }
 
         function random() {
             let characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';

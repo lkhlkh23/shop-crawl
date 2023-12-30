@@ -29,24 +29,27 @@ public class ZalandoCrawler extends BaseCrawler {
 	}
 
 	@Override
-	public List<String> crawl(final String url) throws Exception {
-		final List<String> images = new ArrayList<>();
+	public PageCrawling crawl(final String url, final int page, final int offset) throws Exception {
+		final PageCrawling pageCrawling = new PageCrawling();
 		final Connection conn = Jsoup.connect(url);
 		try {
 			final Document document = conn.get();
 			final String selector = "ul[class='XLgdq7 _0xLoFW JgpeIw r9BRio be4rWJ xlsKrm _4oK5GO heWLCX _MmCDa']";
 			final Elements elements = document.select(selector)
 											  .select("li");
-			for (final Element element : elements) {
-				final String image = element.select("img")
-											.attr("src");
-				images.add(toBase64(ProviderCode.ZALANDO, image, 1));
+			final int limit = Math.min(elements.size(), (offset + 1) * page);
+			for (int i = offset * page; i < limit; i++) {
+				final String image = elements.get(i)
+											 .select("img")
+											 .attr("src");
+				pageCrawling.addImage(toResizedBase64(ProviderCode.ZALANDO, image, 1));
+				pageCrawling.setEnd(i == (limit - 1));
 			}
 		} catch (IOException e) {
 			throw new Exception("Zalando crawling is failed");
 		}
 
-		return images;
+		return pageCrawling;
 	}
 
 }

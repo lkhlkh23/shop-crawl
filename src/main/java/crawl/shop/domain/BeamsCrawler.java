@@ -32,39 +32,28 @@ public class BeamsCrawler extends BaseCrawler {
 	}
 
 	@Override
-	public List<String> crawl(final String url) throws Exception {
-		final List<String> images = new ArrayList<>();
+	public PageCrawling crawl(final String url, final int page, final int offset) throws Exception {
+		final PageCrawling pageCrawling = new PageCrawling();
 		final Connection conn = Jsoup.connect(url);
 		try {
 			final Document document = conn.get();
 			final Elements elements = document.getElementsByClass("item-detail-main")
 											  .select("ul")
 											  .select("li[class='item-image']");
-			final List<CompletableFuture<String>> futures = elements.stream()
-																	.map(this::asyncCrawl)
-																	.toList();
-			CompletableFuture.allOf(futures.toArray(new CompletableFuture[0])).join();
-			futures.forEach(i -> {
-				try {
-					images.add(i.get());
-				} catch (Exception e) {
-					throw new RuntimeException(e);
-				}
-			});
+			final int limit = Math.min(elements.size(), (offset + 1) * page);
+			for (int i = offset * page; i < limit; i++) {
+				final String image = elements.get(i)
+											 .select("img")
+											 .attr("data-original");
+				pageCrawling.addImage(toBase64(ProviderCode.BEAMS, "http:" + image));
+				pageCrawling.setEnd(i == (elements.size() - 1));
+			}
 		} catch (IOException e) {
 			e.printStackTrace();
 			throw new Exception("Beams crawling is failed");
 		}
 
-		return images;
-	}
-
-	private CompletableFuture<String> asyncCrawl(final Element element) {
-		return CompletableFuture.supplyAsync(() -> {
-			final String image = element.select("img")
-										.attr("data-zoom-image");
-			return toBase64(ProviderCode.BEAMS, "http:" + image, 0.58);
-		});
+		return pageCrawling;
 	}
 
 }

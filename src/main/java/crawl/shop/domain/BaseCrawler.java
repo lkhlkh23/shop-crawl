@@ -3,15 +3,9 @@ package crawl.shop.domain;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.MalformedURLException;
 import java.net.URL;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.util.Base64;
-import java.util.List;
 
 import javax.imageio.ImageIO;
 
@@ -21,9 +15,9 @@ import crawl.shop.type.ProviderCode;
 
 public abstract class BaseCrawler {
 
-	public abstract List<String> crawl(final String url) throws Exception;
+	public abstract PageCrawling crawl(final String url, final int page, final int offset) throws Exception;
 
-	protected String toBase64(final ProviderCode brand, final String url, final double percentage) {
+	protected String toResizedBase64(final ProviderCode brand, final String url, final double percentage) {
 		try {
 			final BufferedImage image = ImageIO.read(new URL(url));
 			final int width = (int) (image.getWidth() * percentage);
@@ -41,6 +35,22 @@ public abstract class BaseCrawler {
 
 			return encoded;
 		} catch (Exception e) {
+			e.printStackTrace();
+			return "";
+		}
+	}
+
+	protected String toBase64(final ProviderCode brand, final String url) {
+		try {
+			final BufferedImage image = ImageIO.read(new URL(url));
+			final File file = new File(brand.getCode() + LocalDateTime.now().toString());
+			ImageIO.write(image, "png", file);
+			final String encoded = Base64.getEncoder().encodeToString(FileUtils.readFileToByteArray(file));
+			file.delete();
+
+			return encoded;
+		} catch (Exception e) {
+			e.printStackTrace();
 			return "";
 		}
 	}

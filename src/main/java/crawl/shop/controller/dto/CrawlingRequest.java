@@ -11,5 +11,7 @@ public class CrawlingRequest {
 
 	private String url;
 	private String brand;
+	private int page;
+	private int offset;
 
 }

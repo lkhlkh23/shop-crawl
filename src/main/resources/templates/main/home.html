@@ -7,48 +7,17 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
           integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-    <style>
-        #search-spinner { width: 100%; height: 100%; top: 0; left: 0; display: none; opacity: .6; background: silver; position: absolute; z-index: 2; }
-        #search-spinner div { width: 100%; height: 100%; display: table; }
-        #search-spinner span { display: table-cell; text-align: center; vertical-align: middle; }
-        #search-spinner img { background: white; padding: 1em; border-radius: .7em; }
-    </style>
 </head>
 <body>
     <div class="container mt-5">
-        <form id="myForm" class="form-inline justify-content-center">
-            <div class="form-group mr-2">
-                <select class="form-control" id="brands">
-                    {{#providers}}
-                        <option value="{{code}}">{{code}}</option>
-                    {{/providers}}
-                </select>
-            </div>
-
-            <div class="form-group mr-2">
-                <input type="text" class="form-control" id="search-text" placeholder="Enter Url" style="width: 700px;">
-            </div>
-
-            <div class="form-group mr-2">
-                <button type="button" class="btn btn-primary" id="search-btn">search</button>
-            </div>
-
-            <div class="form-group mr-2">
-                <button type="button" class="btn btn-info" id="down-images-btn">download</button>
-            </div>
-
-            <div class="form-group mr-2">
-                <button type="button" class="btn btn-warning" id="clear-search-btn">clear</button>
-            </div>
-        </form>
-    </div>
-    <div id="crawl-images" class="container mt-5 form-inline justify-content-center">
-    </div>
-    <div id='search-spinner'>
-        <div>
-            <span>
-    	        <img src='//cdnjs.cloudflare.com/ajax/libs/galleriffic/2.0.1/css/loader.gif'>
-            </span>
+        <div class="form-group mr-2">
+            <button type="button" class="btn btn-primary" id="cos-move-btn">COS</button>
+        </div>
+        <div class="form-group mr-2">
+            <button type="button" class="btn btn-info" id="beams-move-btn">BEAMS</button>
+        </div>
+        <div class="form-group mr-2">
+            <button type="button" class="btn btn-warning" id="zalando-move-btn">ZALANDO</button>
         </div>
     </div>
 
@@ -61,77 +30,18 @@
 
     <script type="">
         $(document).ready(function () {
-            $('#search-btn').click(function () {
-                $('.down-image').remove();
-
-                let data = {
-                    'url': $('#search-text').val(),
-                    'brand': $('#brands').val()
-                };
-
-                $.ajax({
-                    type: 'POST',
-                    url: '/crawl/download/images',
-                    contentType: "application/json; charset=utf-8",
-                    dataType: "json",
-                    data: JSON.stringify(data),
-                    success: function (response) {
-                        $("#search-spinner").hide();
-                        if(response.data.length == 0) {
-                            alert('Parsing is failed');
-                            return;
-                        }
-
-                        $.each(response.data, function(index, value) {
-                            let imgTag = $('<img>', {
-                              src: 'data:image/png;base64,' + value,
-                              width : '100px',
-                              height : '200px'
-                            });
-
-                            let aTag = $('<a>', {
-                              href: 'data:image/png;base64,' + value,
-                              download: random() + '.png',
-                              class: 'down-image mr-2'
-                            });
-
-                            aTag.append(imgTag);
-                            aTag.click();
-
-                            $('#crawl-images').append(aTag);
-                        });
-                    },
-                    error: function (error) {
-                        $("#search-spinner").hide();
-                    },
-                    beforeSend: function() {
-                        $("#search-spinner").show();
-                    }
-
-                });
+            $('#cos-move-btn').on('click', function() {
+              window.location.href = '/search/cos';
             });
 
-            $('#down-images-btn').on('click', function() {
-              $('.down-image').each(function() {
-                this.click();
-              });
+            $('#beams-move-btn').on('click', function() {
+              window.location.href = '/search/beams';
             });
 
-            $('#clear-search-btn').on('click', function() {
-              $('#search-text').val('');
+            $('#zalando-move-btn').on('click', function() {
+              window.location.href = '/search/zalando';
             });
         });
-
-        function random() {
-            let characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-            let random = '';
-
-            for (var i = 0; i < 20; i++) {
-                random += characters.charAt(Math.floor(Math.random() * characters.length));
-            }
-
-            return random;
-        }
     </script>
 </body>
 </html>

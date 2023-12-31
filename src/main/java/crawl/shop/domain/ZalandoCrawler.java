@@ -30,10 +30,16 @@ public class ZalandoCrawler extends BaseCrawler {
 
 	@Override
 	public PageCrawling crawl(final String url, final int page, final int offset) throws Exception {
+		long start1 = System.currentTimeMillis();
 		final PageCrawling pageCrawling = new PageCrawling();
 		final Connection conn = Jsoup.connect(url).timeout(30 * 1000);
+		long end1 = System.currentTimeMillis();
+		System.out.println("connect : " + (end1 - start1));
 		try {
+			long start2 = System.currentTimeMillis();
 			final Document document = conn.get();
+			long end2 = System.currentTimeMillis();
+			System.out.println("get connection : " + (end2 - start2));
 			final String selector = "ul[class='XLgdq7 _0xLoFW JgpeIw r9BRio be4rWJ xlsKrm _4oK5GO heWLCX _MmCDa']";
 			final Elements elements = document.select(selector)
 											  .select("li");
@@ -42,7 +48,10 @@ public class ZalandoCrawler extends BaseCrawler {
 				final String image = elements.get(i)
 											 .select("img")
 											 .attr("src");
+				long start3 = System.currentTimeMillis();
 				pageCrawling.addImage(toBase64(ProviderCode.ZALANDO, image));
+				long end3 = System.currentTimeMillis();
+				System.out.println("base64 : " + (end3 - start3));
 				pageCrawling.setEnd(i == (limit - 1));
 			}
 		} catch (IOException e) {

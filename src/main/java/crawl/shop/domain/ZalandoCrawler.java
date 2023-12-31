@@ -36,6 +36,8 @@ public class ZalandoCrawler extends BaseCrawler {
 			long start2 = System.currentTimeMillis();
 			final Document document = Jsoup.connect(url)
 										   .userAgent("opera")
+										   .header("Zalando-Client-Id", "c85ea97b-60b4-46c4-b458-18c6f8a0cc45")
+										   .header("language-preference", "en")
 										   .timeout(0)
 										   .get();
 			long end2 = System.currentTimeMillis();

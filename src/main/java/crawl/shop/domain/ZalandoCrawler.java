@@ -33,7 +33,10 @@ public class ZalandoCrawler extends BaseCrawler {
 		final PageCrawling pageCrawling = new PageCrawling();
 		try {
 			long start2 = System.currentTimeMillis();
-			final Document document = Jsoup.connect(url).timeout(30 * 1000).get();
+			final Document document = Jsoup.connect(url)
+										   .userAgent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36")
+										   .timeout(30 * 1000)
+										   .get();
 			long end2 = System.currentTimeMillis();
 			System.out.println("get connection : " + (end2 - start2));
 			final String selector = "ul[class='XLgdq7 _0xLoFW JgpeIw r9BRio be4rWJ xlsKrm _4oK5GO heWLCX _MmCDa']";

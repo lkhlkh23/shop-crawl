@@ -32,9 +32,20 @@ public class ZalandoCrawler extends BaseCrawler {
 	public PageCrawling crawl(final String url, final int page, final int offset) throws Exception {
 		final PageCrawling pageCrawling = new PageCrawling();
 		try {
+			final String userAgent = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36";
+			System.out.println("start!");
+			long start1 = System.currentTimeMillis();
+			String strText = Jsoup.connect(url)
+								  .userAgent(userAgent)
+								  .timeout(30 * 1000)
+								  .get()
+								  .text();
+			long end1 = System.currentTimeMillis();
+			System.out.println("pre hit : " + (end1 - start1));
+			System.out.println(strText);
 			long start2 = System.currentTimeMillis();
 			final Document document = Jsoup.connect(url)
-										   .userAgent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36")
+										   .userAgent(userAgent)
 										   .timeout(30 * 1000)
 										   .get();
 			long end2 = System.currentTimeMillis();

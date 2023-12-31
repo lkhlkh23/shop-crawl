@@ -31,7 +31,7 @@ public class ZalandoCrawler extends BaseCrawler {
 	@Override
 	public PageCrawling crawl(final String url, final int page, final int offset) throws Exception {
 		final PageCrawling pageCrawling = new PageCrawling();
-		final Connection conn = Jsoup.connect(url);
+		final Connection conn = Jsoup.connect(url).timeout(30 * 1000);
 		try {
 			final Document document = conn.get();
 			final String selector = "ul[class='XLgdq7 _0xLoFW JgpeIw r9BRio be4rWJ xlsKrm _4oK5GO heWLCX _MmCDa']";

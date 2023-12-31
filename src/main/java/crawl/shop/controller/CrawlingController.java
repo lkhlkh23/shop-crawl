@@ -2,9 +2,12 @@ package crawl.shop.controller;
 
 import java.util.List;
 
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import crawl.shop.controller.dto.CrawlingRequest;
@@ -27,6 +30,16 @@ public class CrawlingController {
 		} catch (Exception e) {
 			log.error("Crawling is failed", e);
 			return new CrawlingResponse(List.of(), true);
+		}
+	}
+
+	@GetMapping("/{sec}")
+	public String sleep(@PathVariable(name = "sec") final int sec) {
+		try {
+			Thread.sleep(1000 * sec);
+			return "success";
+		} catch (InterruptedException e) {
+			return "fail";
 		}
 	}
 

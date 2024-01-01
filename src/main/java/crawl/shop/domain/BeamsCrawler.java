@@ -46,7 +46,7 @@ public class BeamsCrawler extends BaseCrawler {
 										   .userAgent("WhatsApp/2.19.81 A")
 										   .method(Connection.Method.GET)
 										   .ignoreContentType(true)
-										   .followRedirects(false)
+										   .followRedirects(true)
 										   .referrer("http://www.google.com")
 										   .header("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7")
 										   .header("Accept-Encoding", "gzip, deflate, br")

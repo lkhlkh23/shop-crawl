@@ -49,9 +49,9 @@ public class BeamsCrawler extends BaseCrawler {
 										   .header("Accept-Encoding", "gzip, deflate, br")
 										   .header("Accept-Language", "ko-KR,ko;q=0.9,en-US;q=0.8,en;q=0.7")
 										   .header("Cache-Control", "max-age=0")
-										   // .header("Sec-Ch-Ua", "'Not_A Brand';v='8', 'Chromium';v='120', 'Google Chrome';v='120'")
+										   .header("Sec-Ch-Ua", "'Not_A Brand';v='8', 'Chromium';v='120', 'Google Chrome';v='120'")
 										   .header("Sec-Ch-Ua-Mobile", "?0")
-										   // .header("Sec-Ch-Ua-Platform", "'macOS'")
+										   .header("Sec-Ch-Ua-Platform", "'macOS'")
 										   .header("Sec-Fetch-Dest", "document")
 										   .header("Sec-Fetch-Mode", "navigate")
 										   .header("Sec-Fetch-Site", "none")
@@ -59,8 +59,8 @@ public class BeamsCrawler extends BaseCrawler {
 										   .header("Upgrade-Insecure-Requests", "1")
 										   .cookies(getCookies())
 										   .timeout(1000 * 30)
-				.maxBodySize(999999999)
-										   .get();
+										   .execute()
+										   .parse();
 			final Elements elements = document.getElementsByClass("item-detail-main")
 											  .select("ul")
 											  .select("li[class='item-image']");

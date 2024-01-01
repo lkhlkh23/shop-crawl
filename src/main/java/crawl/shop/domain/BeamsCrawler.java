@@ -2,6 +2,7 @@ package crawl.shop.domain;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.CookieStore;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -40,28 +41,27 @@ public class BeamsCrawler extends BaseCrawler {
 		final PageCrawling pageCrawling = new PageCrawling();
 		try {
 			final String userAgent = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36";
-			final Connection.Response response = Jsoup.connect(url)
-													  .userAgent(userAgent)
-													  .method(Connection.Method.GET)
-													  .ignoreContentType(true)
-													  .referrer("http://www.google.com")
-													  .header("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7")
-													  .header("Accept-Encoding", "gzip, deflate, br")
-													  .header("Accept-Language", "ko-KR,ko;q=0.9,en-US;q=0.8,en;q=0.7")
-													  .header("Cache-Control", "max-age=0")
-													  .header("Sec-Ch-Ua", "'Not_A Brand';v='8', 'Chromium';v='120', 'Google Chrome';v='120'")
-													  .header("Sec-Ch-Ua-Mobile", "?0")
-													  .header("Sec-Ch-Ua-Platform", "'macOS'")
-													  .header("Sec-Fetch-Dest", "document")
-													  .header("Sec-Fetch-Mode", "navigate")
-													  .header("Sec-Fetch-Site", "none")
-													  .header("Sec-Fetch-User", "?1")
-													  .header("Upgrade-Insecure-Requests", "1")
-													  .cookies(getCookies())
-													  .timeout(1000 * 30)
-													  .execute();
-			System.out.println("~~~~~~~");
-			final Document document = response.parse();
+			final Document document = Jsoup.connect(url)
+										   .userAgent(userAgent)
+										   .method(Connection.Method.GET)
+										   .ignoreContentType(true).followRedirects(false)
+										   .referrer("http://www.google.com")
+										   .header("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7")
+										   .header("Accept-Encoding", "gzip, deflate, br")
+										   .header("Accept-Language", "ko-KR,ko;q=0.9,en-US;q=0.8,en;q=0.7")
+										   .header("Cache-Control", "max-age=0")
+										   .header("Sec-Ch-Ua", "'Not_A Brand';v='8', 'Chromium';v='120', 'Google Chrome';v='120'")
+										   .header("Sec-Ch-Ua-Mobile", "?0")
+										   .header("Sec-Ch-Ua-Platform", "'macOS'")
+										   .header("Sec-Fetch-Dest", "document")
+										   .header("Sec-Fetch-Mode", "navigate")
+										   .header("Sec-Fetch-Site", "none")
+										   .header("Sec-Fetch-User", "?1")
+										   .header("Upgrade-Insecure-Requests", "1")
+										   .cookies(getCookies())
+										   .timeout(1000 * 30)
+										   .execute()
+										   .parse();
 			final Elements elements = document.getElementsByClass("item-detail-main")
 											  .select("ul")
 											  .select("li[class='item-image']");

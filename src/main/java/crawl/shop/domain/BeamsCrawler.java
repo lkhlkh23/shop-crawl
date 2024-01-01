@@ -40,6 +40,9 @@ public class BeamsCrawler extends BaseCrawler {
 		final PageCrawling pageCrawling = new PageCrawling();
 		try {
 			final String userAgent = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36";
+			System.out.println("start");
+			final Connection connection = Jsoup.connect(url);
+			System.out.println("end");
 			final Document document = Jsoup.connect(url)
 										   .userAgent(userAgent)
 										   .method(Connection.Method.GET)

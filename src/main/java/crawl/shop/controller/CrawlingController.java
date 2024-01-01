@@ -33,14 +33,4 @@ public class CrawlingController {
 		}
 	}
 
-	@GetMapping("/{sec}")
-	public String sleep(@PathVariable(name = "sec") final int sec) {
-		try {
-			Thread.sleep(1000 * sec);
-			return "success";
-		} catch (InterruptedException e) {
-			return "fail";
-		}
-	}
-
 }

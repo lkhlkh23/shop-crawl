@@ -8,6 +8,7 @@ import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
@@ -37,10 +38,11 @@ public class BeamsCrawler extends BaseCrawler {
 		final PageCrawling pageCrawling = new PageCrawling();
 		try {
 			final String userAgent = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36";
+			System.out.println(System.getProperty("http.proxyHost") == null ? "null" : System.getProperty("http.proxyHost").toString());
 			final Document document = Jsoup.connect(url)
 										   .userAgent(userAgent)
-				.method(Connection.Method.GET)
-				.ignoreContentType(true)
+										   .method(Connection.Method.GET)
+										   .ignoreContentType(true)
 										   .referrer("http://www.google.com")
 										   .header("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7")
 										   .header("Accept-Encoding", "gzip, deflate, br")

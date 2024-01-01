@@ -51,7 +51,7 @@ public class BeamsCrawler extends BaseCrawler {
 										   .header("Sec-Fetch-Site", "none")
 										   .header("Sec-Fetch-User", "?1")
 										   .header("Upgrade-Insecure-Requests", "1")
-										   .timeout(0)
+										   .timeout(5000)
 										   .get();
 			final Elements elements = document.getElementsByClass("item-detail-main")
 											  .select("ul")

@@ -44,7 +44,7 @@ public class BeamsCrawler extends BaseCrawler {
 
 			final Document document = Jsoup.connect(url)
 										   .userAgent("WhatsApp/2.19.81 A")
-										   //.method(Connection.Method.GET)
+										   .method(Connection.Method.GET)
 										   .ignoreContentType(true)
 										   .followRedirects(true)
 										   .referrer("https://www.google.com")

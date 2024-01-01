@@ -60,7 +60,8 @@ public class BeamsCrawler extends BaseCrawler {
 										   .header("Upgrade-Insecure-Requests", "1")
 										   .cookies(getCookies())
 										   .timeout(1000 * 30)
-										   .get();
+										   .execute()
+										   .parse();
 			final Elements elements = document.getElementsByClass("item-detail-main")
 											  .select("ul")
 											  .select("li[class='item-image']");

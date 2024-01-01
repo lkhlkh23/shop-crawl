@@ -40,9 +40,9 @@ public class BeamsCrawler extends BaseCrawler {
 		final PageCrawling pageCrawling = new PageCrawling();
 		try {
 			final String userAgent = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36";
-			final Document document = Jsoup.connect(url)
-										   .userAgent(userAgent)
-										   .method(Connection.Method.HEAD)
+			final Connection connection = Jsoup.connect(url);
+			final Document document = connection.userAgent(userAgent)
+										   .method(Connection.Method.GET)
 										   .ignoreContentType(true)
 										   .referrer("http://www.google.com")
 										   .header("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7")
@@ -59,6 +59,7 @@ public class BeamsCrawler extends BaseCrawler {
 										   .header("Upgrade-Insecure-Requests", "1")
 										   .cookies(getCookies())
 										   .timeout(1000 * 30)
+				.maxBodySize(999999999)
 										   .get();
 			final Elements elements = document.getElementsByClass("item-detail-main")
 											  .select("ul")

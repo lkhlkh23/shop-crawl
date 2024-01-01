@@ -3,6 +3,7 @@ server:
   servlet:
     encoding:
       force-response: true
+  connection-timeout: 1800000
 
 spring:
   mustache:

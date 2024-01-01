@@ -30,7 +30,7 @@ dependencies {
 	annotationProcessor 'org.projectlombok:lombok'
 	implementation 'org.projectlombok:lombok-mapstruct-binding:0.2.0'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-	implementation 'org.jsoup:jsoup:1.7.2'
+	implementation 'org.jsoup:jsoup:1.17.2'
 	implementation 'commons-io:commons-io:2.15.1'
 }
 

@@ -51,7 +51,7 @@ public class ZalandoCrawler extends BaseCrawler {
 											 .select("img")
 											 .attr("src");
 				pageCrawling.addImage(toBase64(ProviderCode.ZALANDO, image));
-				pageCrawling.setEnd(i == (limit - 1));
+				pageCrawling.setEnd(i == (elements.size() - 1));
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
